@@ -26,5 +26,7 @@ jobs:
         run: arduino-cli core update-index --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
       - name: Instalar core Arduino ESP32
         run: arduino-cli core install esp32:esp32 --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+      - name: Preparar nome exigido pelo Arduino CLI
+        run: mkdir -p /tmp/sentinela360 && cp wokwi/sketch.ino /tmp/sentinela360/sentinela360.ino
       - name: Compilar ESP32 DevKit
-        run: arduino-cli compile --fqbn esp32:esp32:esp32 wokwi
+        run: arduino-cli compile --fqbn esp32:esp32:esp32 /tmp/sentinela360
