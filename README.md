@@ -54,3 +54,6 @@ Em 12/11/2026, o Wokwi iniciou, conectou ao Wi-Fi e publicou dados aceitos no Th
 O painel agora mantém os seis gráficos com 30 resultados, nomes, cores e escalas legíveis. O intervalo de atualização do painel continua no padrão porque não aparece na janela de opções; os atalhos individuais usam 60 s. Ainda faltam testar A → B sem alerta, anexar capturas reais, confirmar os nomes oficiais da equipe, registrar uma observação territorial própria e substituir a chave exposta do Wokwi por uma configuração privada.
 
 Sensores e tráfego são simulados: o sistema não identifica veículos nem comprova infrações.
+
+
+**Checagem final (12/11/2026):** o canal ainda mostrava a entrada 88, de 05:52:52 UTC. Uma nova tentativa no Wokwi falhou ao conectar ao gateway IoT (`wss://netwi.wokwi.com/`) e não gerou novo dado após mais de 60 s. Assim, as publicações anteriores estão comprovadas, mas a atualização em tempo real não foi confirmada nesta última checagem. A captura dos gráficos comprova suas configurações, não o envio atual.
