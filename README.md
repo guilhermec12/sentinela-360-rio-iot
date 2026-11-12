@@ -45,11 +45,11 @@ Os atalhos individuais abaixo usam janela de 30 resultados, atualização visual
 
 ## Componentes e pinagem
 
-ESP32 DevKit V1; dois HC-SR04; LEDs verde e vermelho com resistores de 220 Ω. Sensor A: TRIG/ECHO GPIO 18/19; sensor B: GPIO 25/26; LEDs: GPIO 21/22. O canal ThingSpeak 3574113 está público para avaliação. A chave de escrita foi omitida do firmware do GitHub e deve permanecer apenas na cópia privada do Wokwi.
+ESP32 DevKit V1; dois HC-SR04; LEDs verde e vermelho com resistores de 220 Ω. Sensor A: TRIG/ECHO GPIO 18/19; sensor B: GPIO 25/26; LEDs: GPIO 21/22. O canal ThingSpeak 3574113 está público para avaliação. A chave de escrita não deve ser publicada em projetos ou documentação; configure-a somente numa cópia privada do Wokwi.
 
 ## Verificação e limitações
 
-Em 12/11/2026, o Wokwi iniciou, conectou ao Wi-Fi e publicou dados aceitos no ThingSpeak. O repouso A=153 cm/B=257 cm coincidiu com os campos 1/2 da entrada 65. Com ambos os sensores a 30 cm por mais de cinco segundos, o alerta de bloqueio foi acionado e a entrada 67 registrou os campos como 30, 30, 0, 1, 0, 1. Na sequência inversa B → A, o alerta de contramão foi acionado; a entrada 69 registrou 152, 253, 1, 1, 1, 2. O bloqueio também foi contado nessa última entrada porque os dois pontos ficaram ocupados por mais de cinco segundos. Ao afastar os objetos, os estados ativos voltaram a 0 e os totais permaneceram. A compilação automatizada do sketch local passou no GitHub Actions.
+Em 12/11/2026, o Wokwi iniciou, conectou ao Wi-Fi e publicou dados aceitos no ThingSpeak. O repouso A=153 cm/B=257 cm coincidiu com os campos 1/2 da entrada 65. Com ambos os sensores a 30 cm por mais de cinco segundos, o alerta de bloqueio foi acionado e a entrada 67 registrou os campos como 30, 30, 0, 1, 0, 1. Na sequência inversa B → A, o alerta de contramão foi acionado; a entrada 69 registrou 152, 253, 1, 1, 1, 2. Em um teste posterior, uma tentativa de A → B não foi válida: os sensores permaneceram ocupados por mais de cinco segundos, gerando o bloqueio na entrada 81 (30, 30, 0, 1, 1, 3). Depois de afastar os objetos, o estado de bloqueio voltou a 0; o sentido A → B ainda precisa de um teste controlado. A compilação automatizada do sketch local passou no GitHub Actions.
 
 Os atalhos individuais usam 30 resultados e atualização visual de 60 s. Os gráficos incorporados ao painel ainda não foram configurados: exibem 60 resultados, e os campos 5/6 usam intervalo visual de 15 s. Falta salvar os parâmetros desejados no painel. Também faltam testar A → B sem alerta, anexar capturas reais, confirmar os nomes oficiais da equipe e registrar uma observação territorial própria.
 
