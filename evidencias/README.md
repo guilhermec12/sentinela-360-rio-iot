@@ -11,13 +11,18 @@ O teste de distância curta permanece registrado nas entradas 93 e 94: ambos os 
 - [Abrir a simulação no Wokwi](https://wokwi.com/projects/480355518486978561)
 - [Abrir o canal público ThingSpeak](https://thingspeak.mathworks.com/channels/3574113)
 
-As imagens abaixo consultam os últimos 30 resultados públicos do canal:
+As imagens consultam os últimos 30 resultados do canal público:
 
-![Distância A (cm)](https://api.thingspeak.com/channels/3574113/charts/1.png?results=30&dynamic=true&height=240&width=600)
-![Distância B (cm)](https://api.thingspeak.com/channels/3574113/charts/2.png?results=30&dynamic=true&height=240&width=600)
-![Contramão ativa](https://api.thingspeak.com/channels/3574113/charts/3.png?results=30&dynamic=true&height=240&width=600)
-![Bloqueio ativo](https://api.thingspeak.com/channels/3574113/charts/4.png?results=30&dynamic=true&height=240&width=600)
-![Total de contramãos](https://api.thingspeak.com/channels/3574113/charts/5.png?results=30&dynamic=true&height=240&width=600)
-![Total de bloqueios](https://api.thingspeak.com/channels/3574113/charts/6.png?results=30&dynamic=true&height=240&width=600)
+![Distância A (cm)](https://api.thingspeak.com/channels/3574113/charts/1?results=30&dynamic=true&height=240&width=600)
+
+![Distância B (cm)](https://api.thingspeak.com/channels/3574113/charts/2?results=30&dynamic=true&height=240&width=600)
+
+![Contramão ativa](https://api.thingspeak.com/channels/3574113/charts/3?results=30&dynamic=true&height=240&width=600)
+
+![Bloqueio ativo](https://api.thingspeak.com/channels/3574113/charts/4?results=30&dynamic=true&height=240&width=600)
+
+![Total de contramãos](https://api.thingspeak.com/channels/3574113/charts/5?results=30&dynamic=true&height=240&width=600)
+
+![Total de bloqueios](https://api.thingspeak.com/channels/3574113/charts/6?results=30&dynamic=true&height=240&width=600)
 
 A captura local `thingspeak-painel.png` é histórica e mostra até a entrada 88; os gráficos acima consultam os dados atuais. As medições e alertas são simulados e não comprovam infrações.
