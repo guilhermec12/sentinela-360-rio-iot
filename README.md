@@ -1,37 +1,53 @@
-# CitizenTech IoT — Sentinela 360 Rio
+# CitizenTech IoT: Sentinela 360 Rio
 
-Protótipo da atividade CitizenTech IoT: Monitoramento Inteligente com ESP32 e ThingSpeak, da disciplina Edge Computing & Computer Systems — FIAP Global Solution 2026.2.
+**Disciplina:** Edge Computing & Computer Systems · FIAP Global Solution 2026.2 · Engenharia de Software, 1º ano, RJ
+
+> Protótipo de IoT com ESP32 no Wokwi, processamento local e telemetria no ThingSpeak.
 
 ## Acesso e arquivos
 
-- [Simulação Wokwi](https://wokwi.com/projects/480355518486978561)
-- [ThingSpeak — canal público e gráficos](https://thingspeak.mathworks.com/channels/3574113)
-- [Relatório técnico](TRABALHO.md)
-- [Firmware ESP32 sem a chave de escrita](wokwi/sketch.ino)
-- [Diagrama do circuito](wokwi/diagram.json)
+- Wokwi: https://wokwi.com/projects/480355518486978561
+- ThingSpeak público: https://thingspeak.mathworks.com/channels/3574113
+- Firmware: wokwi/sketch.ino
+- Diagrama: wokwi/diagram.json
+- Relatório: TRABALHO.md
+- Guia ThingSpeak: thingspeak/CONFIGURACAO.md
+- Roteiro: wokwi/ROTEIRO-DEMO-BASE.md
+- Checklist: CHECKLIST-ENTREGA.md
 
-## Problema, objetivo e beneficiários
+## Problema, objetivo e público
 
-O protótipo observa dois pontos de uma travessia e sinaliza padrões simulados de passagem em sentido inesperado ou ocupação simultânea prolongada. Pode apoiar discussões sobre segurança de pedestres, ciclistas e usuários de transporte público. Relaciona-se aos ODS 11 (Cidades e Comunidades Sustentáveis) e 3 (Saúde e Bem-Estar). A equipe ainda deve registrar o cruzamento/bairro e uma observação própria; não inventamos um endereço ou ocorrência local.
+O protótipo representa dois pontos de uma travessia e sinaliza padrões simulados de circulação em sentido inesperado ou ocupação simultânea prolongada. A solução didática usa dois sensores HC-SR04, processa as distâncias localmente no ESP32, aciona LEDs e envia os dados ao ThingSpeak. O público considerado são pedestres, ciclistas e usuários do transporte público. O tema se relaciona aos ODS 11 e 3.
+
+A equipe ainda precisa registrar o bairro/cruzamento e uma observação local própria; não inventamos endereço ou ocorrência real. Integrantes informados: Guilherme Correia e João Vitor Barros; confirmar os nomes completos oficiais para a entrega.
 
 ## Como funciona
 
-Dois HC-SR04 medem as distâncias A/B. O ESP32 processa transições localmente, acende LED verde em leitura válida sem alerta e vermelho diante de alerta ou leitura inválida. A ordem esperada é A→B; a sequência inversa gera candidato a contramão. Ocupação simultânea por mais de 5 s gera candidato a bloqueio. A cada 20 s são enviados snapshots ao ThingSpeak. Para observar valores, mantenha a distância de teste até a próxima publicação.
+O sentido padrão esperado é A → B. Uma sequência B → A gera um candidato simulado a contramão. A ocupação simultânea dos dois pontos por mais de cinco segundos gera um candidato a bloqueio. O firmware lê os sensores continuamente e publica snapshots a cada 60 segundos; a primeira publicação ocorre assim que o Wi-Fi e o horário estiverem prontos.
 
-| Campo | Conteúdo |
-|---|---|
-| 1 e 2 | Distâncias A/B (cm) |
-| 3 e 4 | Estado candidato a contramão/bloqueio (0/1) |
-| 5 e 6 | Contadores cumulativos desses eventos |
+Os campos 3 e 4 sinalizam evento ocorrido desde o último envio aceito ou alerta ainda ativo. Assim, um evento curto continua visível no próximo ponto do gráfico. Os campos 5 e 6 mantêm os contadores cumulativos até reiniciar o ESP32.
+
+| Campo | Conteúdo | Visualização |
+|---|---|---|
+| 1 | Distância A, cm | Linha, centímetros |
+| 2 | Distância B, cm | Linha, centímetros |
+| 3 | Evento de contramão, 0/1 | Degrau binário |
+| 4 | Evento de bloqueio, 0/1 | Degrau binário |
+| 5 | Total de eventos de contramão | Contagem cumulativa |
+| 6 | Total de eventos de bloqueio | Contagem cumulativa |
+
+Para facilitar a leitura, os seis gráficos devem atualizar a cada 60 s e mostrar os últimos 30 resultados. Mantenha um gráfico por campo para não misturar distâncias em cm com estados binários e contadores.
 
 ## Componentes e pinagem
 
-ESP32 DevKit V1, dois HC-SR04, LEDs verde/vermelho e resistores de 220 Ω. TRIG/ECHO A: GPIO 18/19; B: 25/26; LEDs: GPIO 21/22. Em montagem física, adapte o ECHO de 5 V ao GPIO de 3,3 V do ESP32.
+ESP32 DevKit V1, dois sensores ultrassônicos HC-SR04, LEDs verde e vermelho com resistores de 220 Ω. Sensor A: TRIG/ECHO GPIO 18/19; sensor B: GPIO 25/26; LEDs: GPIO 21/22. O canal ThingSpeak 3574113 está público para avaliação. A chave de escrita não está no firmware do GitHub e deve permanecer apenas na cópia privada do Wokwi.
 
-## Equipe e pendências
+## Verificação e limitações
 
-Guilherme Correia e João Vitor Barros — confirmar nomes completos oficiais. Falta registrar o bairro/cruzamento e uma observação da equipe. O cenário de bloqueio já foi testado: ambos os sensores em 20 cm geraram alerta no serial e total 1 no campo 6 do ThingSpeak; ao voltar a 150 cm, o alerta apagou e o total foi mantido. Ainda falta testar a sequência inversa e salvar capturas reais dos cenários.
+O cenário de bloqueio foi observado anteriormente: ambos os sensores em 20 cm geraram alerta no serial e total 1 no campo 6; ao retornar a 150 cm, o alerta apagou e o total permaneceu. Essa verificação usava o intervalo anterior de 20 s. O novo intervalo de 60 s e a retenção de eventos nos campos 3/4 precisam ser confirmados em execução após a atualização do projeto Wokwi.
 
-## Limitações
+Sensores, distâncias e passagens são simulados. Dois pontos ultrassônicos não identificam pessoas ou veículos, nem comprovam infrações. Os alertas exigem avaliação humana. Os contadores ficam em memória e zeram no reinício. Ainda faltam testar contramão, registrar o território observado e salvar capturas reais para a entrega.
 
-Sensores e tráfego são simulados. Dois sensores não identificam pessoas/veículos nem comprovam infração; os sinais são candidatos para avaliação humana. Contadores em RAM zeram ao reiniciar. A chave de escrita não está no código público e deve ser configurada apenas numa cópia privada.
+## Referência
+
+FIAP Global Solution 2026.2, Desafio FIAP: CitizenTech, Edge Computing & Computer Systems, páginas 36–39.
