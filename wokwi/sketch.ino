@@ -49,20 +49,20 @@ int readCm(int i) {
 void publish(void*) {
   WiFi.mode(WIFI_STA); WiFi.setAutoReconnect(true); WiFi.begin("Wokwi-GUEST", "", 6);
   configTime(0,0,"pool.ntp.org","time.google.com");
-  uint32_t last=millis()-20000U;
+  uint32_t last=millis()-60000U, sentWrongTotal=0, sentBlockTotal=0;
   for (;;) {
     Snapshot s;
-    if (WiFi.status()==WL_CONNECTED && time(nullptr)>1700000000L && millis()-last>=20000U && xQueuePeek(mailbox,&s,0)==pdTRUE) {
+    if (WiFi.status()==WL_CONNECTED && time(nullptr)>1700000000L && millis()-last>=60000U && xQueuePeek(mailbox,&s,0)==pdTRUE) {
       last=millis(); WiFiClientSecure tls; tls.setCACert(ROOT_CA); HTTPClient http;
       if (http.begin(tls,"https://api.thingspeak.com/update")) {
         http.setConnectTimeout(5000); http.setTimeout(5000);
         http.addHeader("Content-Type","application/x-www-form-urlencoded");
         String body=String("api_key=")+WRITE_KEY;
         body += "&field1="+String(s.a); body += "&field2="+String(s.b);
-        body += "&field3="+String(s.wrong); body += "&field4="+String(s.block);
+        bool wrongEvent=s.wrong||s.wrongTotal>sentWrongTotal, blockEvent=s.block||s.blockTotal>sentBlockTotal; body += "&field3="+String(wrongEvent ? 1 : 0); body += "&field4="+String(blockEvent ? 1 : 0);
         body += "&field5="+String(s.wrongTotal); body += "&field6="+String(s.blockTotal);
         int code=http.POST(body); long id=code==200 ? http.getString().toInt() : 0;
-        if (id>0) { Serial.print("ThingSpeak: entrada aceita id="); Serial.println(id); }
+        if (id>0) { sentWrongTotal=s.wrongTotal; sentBlockTotal=s.blockTotal; Serial.printf("ThingSpeak: entrada %ld aceita | A=%d B=%d eventos=%d/%d totais=%lu/%lu\n",id,s.a,s.b,wrongEvent,blockEvent,(unsigned long)s.wrongTotal,(unsigned long)s.blockTotal); }
         else { Serial.print("ThingSpeak: envio nao confirmado HTTP "); Serial.println(code); }
         http.end();
       }
