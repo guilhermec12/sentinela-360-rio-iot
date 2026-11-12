@@ -1,0 +1,30 @@
+name: Compilar firmware ESP32
+
+on:
+  push:
+    paths:
+      - 'wokwi/**'
+      - '.github/workflows/esp32-build.yml'
+  pull_request:
+    paths:
+      - 'wokwi/**'
+      - '.github/workflows/esp32-build.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+      - name: Instalar Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
+      - name: Atualizar índice ESP32
+        run: arduino-cli core update-index --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+      - name: Instalar core Arduino ESP32
+        run: arduino-cli core install esp32:esp32 --additional-urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+      - name: Compilar ESP32 DevKit
+        run: arduino-cli compile --fqbn esp32:esp32:esp32 wokwi
