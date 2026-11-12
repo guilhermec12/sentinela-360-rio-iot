@@ -30,7 +30,7 @@ ESP32 DevKit V1, dois HC-SR04, LEDs verde/vermelho e resistores de 220 Ω. TRIG/
 
 ## Equipe e pendências
 
-Guilherme Correia e João Vitor Barros — confirmar nomes completos oficiais. Para concluir a entrega, incluir esses nomes, a observação local da equipe e capturas reais dos cenários no Wokwi e dos gráficos ThingSpeak. A transmissão em repouso foi observada; os cenários com alterações de distância e alertas precisam ser registrados.
+Guilherme Correia e João Vitor Barros — confirmar nomes completos oficiais. Falta registrar o bairro/cruzamento e uma observação da equipe. O cenário de bloqueio já foi testado: ambos os sensores em 20 cm geraram alerta no serial e total 1 no campo 6 do ThingSpeak; ao voltar a 150 cm, o alerta apagou e o total foi mantido. Ainda falta testar a sequência inversa e salvar capturas reais dos cenários.
 
 ## Limitações
 
