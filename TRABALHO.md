@@ -37,18 +37,20 @@ O ESP32 publica snapshots a cada 60 segundos, com a primeira publicação após 
 | 4 | Evento de bloqueio, 0/1 |
 | 5 e 6 | Contadores cumulativos de contramão e bloqueio |
 
-O README contém seis atalhos individuais com janela de 30 resultados, atualização visual de 60 s, unidades, cores e escalas. Esses atalhos abrem visualizações personalizadas; não alteram as configurações padrão dos gráficos incorporados ao painel do canal. O firmware usa HTTPS com validação TLS. A chave de escrita foi omitida do código público e deve ficar somente na cópia privada do Wokwi. O canal 3574113 está público para avaliação.
+O README contém seis atalhos individuais com janela de 30 resultados, atualização visual de 60 s, unidades, cores e escalas. Esses atalhos abrem visualizações personalizadas; não alteram as configurações padrão dos gráficos incorporados ao painel do canal. O canal 3574113 está público para avaliação. Não inclua chaves de API em relatórios, capturas ou no repositório.
 
-## Verificação observada e estado da atualização
+## Testes de integração observados em 12/11/2026
 
-No teste anterior, ambos os sensores em 20 cm geraram candidato a bloqueio após cinco segundos; uma escrita foi aceita e o campo 6 mostrou total 1. Ao voltar a 150 cm, o alerta apagou e o total permaneceu. Esse teste usava intervalo de 20 s. O firmware revisado para intervalo de 60 s e retenção de eventos foi salvo no Wokwi e publicado em wokwi/sketch.ino no GitHub. Ainda é necessário executar a versão revisada para confirmar a telemetria de ponta a ponta e demonstrar a sequência inversa de contramão. Capturas atuais do teste também precisam ser registradas.
+O Wokwi iniciou, conectou ao Wi-Fi e confirmou gravações no ThingSpeak. No repouso, as leituras A=153 cm e B=257 cm coincidiram com os campos 1/2 da entrada 65. Com os dois sensores a 30 cm por mais de cinco segundos, o serial indicou bloqueio; a entrada 67 registrou 30, 30, 0, 1, 0, 1. Na sequência inversa B → A, o serial indicou contramão; a entrada 69 registrou 152, 253, 1, 1, 1, 2. O bloqueio também foi contado nessa última entrada porque ambos ficaram ocupados tempo suficiente. Ao afastar os objetos, os alertas voltaram a 0 e os totais cumulativos foram preservados. A compilação automatizada do sketch local passou no GitHub Actions.
+
+Os atalhos individuais do README usam 30 resultados e atualização visual de 60 s. Os gráficos incorporados ao painel ainda exibem 60 resultados; os campos 5/6 atualizam visualmente em 15 s. Falta salvar os parâmetros desejados nos seis gráficos do painel.
 
 ## Pendências da equipe
 
-- Confirmar nomes completos oficiais.
-- Registrar o bairro/cruzamento e observação local própria.
-- Executar e registrar os cenários A → B, B → A e bloqueio após atualizar.
-- Conferir cada gráfico do canal ThingSpeak em uso.
+- Testar e registrar a sequência esperada A → B sem acionar contramão.
+- Salvar capturas reais do Wokwi e ThingSpeak em evidencias/.
+- Ajustar os seis gráficos incorporados ao painel para 30 resultados e 60 s.
+- Confirmar nomes completos oficiais e registrar uma observação territorial própria.
 
 ## Limitações
 
