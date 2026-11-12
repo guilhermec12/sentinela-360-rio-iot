@@ -28,31 +28,28 @@ Em montagem física, adapte o ECHO de 5 V ao limite de 3,3 V do ESP32. O diagram
 
 Leituras válidas: 2–400 cm. Cada ponto ocupa a 40 cm ou menos e libera acima de 50 cm (histerese). A ordem de passagem é avaliada em 2,5 s; 400 ms com os dois pontos livres rearma a detecção. O bloqueio é contado após cinco segundos com ambos ocupados.
 
-O ESP32 publica snapshots a cada 60 segundos, com a primeira publicação após Wi-Fi e sincronização do horário. Os seis gráficos devem atualizar a cada 60 s e mostrar os últimos 30 resultados, mantendo um gráfico por campo.
+O ESP32 publica snapshots a cada 60 segundos, com a primeira publicação após Wi-Fi e sincronização do horário. Os campos 3/4 sinalizam evento ocorrido desde o último envio aceito ou alerta ainda ativo; os campos 5/6 guardam os totais cumulativos até reiniciar o ESP32.
 
 | Campo | Conteúdo |
 |---|---|
 | 1 e 2 | Distâncias A/B em centímetros |
-| 3 | Evento de contramão desde o último envio aceito ou alerta ainda ativo, 0/1 |
-| 4 | Evento de bloqueio desde o último envio aceito ou alerta ainda ativo, 0/1 |
+| 3 | Evento de contramão, 0/1 |
+| 4 | Evento de bloqueio, 0/1 |
 | 5 e 6 | Contadores cumulativos de contramão e bloqueio |
 
-O firmware usa HTTPS com validação TLS. A chave de escrita foi omitida do código público e deve ficar somente na cópia privada do Wokwi. O canal 3574113 está público para avaliação.
+O README contém seis atalhos individuais com janela de 30 resultados, atualização visual de 60 s, unidades, cores e escalas. Esses atalhos abrem visualizações personalizadas; não alteram as configurações padrão dos gráficos incorporados ao painel do canal. O firmware usa HTTPS com validação TLS. A chave de escrita foi omitida do código público e deve ficar somente na cópia privada do Wokwi. O canal 3574113 está público para avaliação.
 
 ## Verificação observada e estado da atualização
 
-No teste anterior, ambos os sensores em 20 cm geraram candidato a bloqueio após cinco segundos; uma escrita foi aceita e o campo 6 mostrou total 1. Ao voltar a 150 cm, o alerta apagou e o total permaneceu. Esse teste usava intervalo de 20 s. O firmware agora foi ajustado para 60 s e para manter eventos curtos até o próximo envio aceito; essa revisão ainda precisa ser verificada ao vivo no Wokwi.
-
-## Beneficiários, ODS e limitações
-
-O tema se relaciona ao ODS 11 (Cidades e Comunidades Sustentáveis) e ao ODS 3 (Saúde e Bem-Estar). Sensores, distâncias e passagens são simulados. Dois pontos ultrassônicos não identificam pessoas ou veículos nem provam direção real. Os contadores ficam em memória e zeram ao reiniciar o ESP32; o protótipo não substitui engenharia de tráfego nem fiscalização.
+No teste anterior, ambos os sensores em 20 cm geraram candidato a bloqueio após cinco segundos; uma escrita foi aceita e o campo 6 mostrou total 1. Ao voltar a 150 cm, o alerta apagou e o total permaneceu. Esse teste usava intervalo de 20 s. O firmware revisado para intervalo de 60 s e retenção de eventos foi salvo no Wokwi e publicado em wokwi/sketch.ino no GitHub. Ainda é necessário executar a versão revisada para confirmar a telemetria de ponta a ponta e demonstrar a sequência inversa de contramão. Capturas atuais do teste também precisam ser registradas.
 
 ## Pendências da equipe
 
-- Confirmar os nomes completos oficiais.
-- Registrar o bairro/cruzamento e uma observação local própria.
-- Demonstrar a sequência inversa para contramão após sincronizar o novo firmware.
-- Salvar capturas reais do Wokwi e dos gráficos na pasta de evidências.
-- Conferir os links sem sessão autenticada.
+- Confirmar nomes completos oficiais.
+- Registrar o bairro/cruzamento e observação local própria.
+- Executar e registrar os cenários A → B, B → A e bloqueio após atualizar.
+- Conferir cada gráfico do canal ThingSpeak em uso.
 
-**Referência:** FIAP, Desafio FIAP: CitizenTech, Global Solution 2026.2, Edge Computing & Computer Systems, pp. 36–39.
+## Limitações
+
+Sensores e tráfego são simulados. Dois pontos ultrassônicos não identificam pessoas ou veículos nem comprovam infrações. Os contadores ficam em memória e zeram quando o ESP32 reinicia. Uma instalação real exigiria validação em campo, adequação elétrica e avaliação humana.
