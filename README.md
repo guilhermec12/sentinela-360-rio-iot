@@ -1,39 +1,37 @@
 # CitizenTech IoT — Sentinela 360 Rio
 
-Protótipo da atividade de Edge Computing & Computer Systems da FIAP Global Solution 2026.2: ESP32 no Wokwi, dois sensores HC-SR04, sinalização local e telemetria no ThingSpeak.
+Protótipo da atividade CitizenTech IoT: Monitoramento Inteligente com ESP32 e ThingSpeak, da disciplina Edge Computing & Computer Systems — FIAP Global Solution 2026.2.
 
-## Links
+## Acesso e arquivos
 
 - [Simulação Wokwi](https://wokwi.com/projects/480355518486978561)
 - [ThingSpeak — canal público e gráficos](https://thingspeak.mathworks.com/channels/3574113)
+- [Relatório técnico](TRABALHO.md)
+- [Firmware ESP32 sem a chave de escrita](wokwi/sketch.ino)
+- [Diagrama do circuito](wokwi/diagram.json)
 
 ## Problema, objetivo e beneficiários
 
-O projeto demonstra como observar dois pontos de uma travessia e sinalizar padrões simulados de passagem em sentido inesperado ou ocupação simultânea prolongada. Busca apoiar a discussão sobre segurança de pedestres, ciclistas e usuários do transporte público (ODS 11 e ODS 3). O protótipo não identifica veículos nem comprova infrações. A equipe deve incluir a observação real do cruzamento/bairro escolhido antes da entrega; esse dado não foi inventado.
+O protótipo observa dois pontos de uma travessia e sinaliza padrões simulados de passagem em sentido inesperado ou ocupação simultânea prolongada. Pode apoiar discussões sobre segurança de pedestres, ciclistas e usuários de transporte público. Relaciona-se aos ODS 11 (Cidades e Comunidades Sustentáveis) e 3 (Saúde e Bem-Estar). A equipe ainda deve registrar o cruzamento/bairro e uma observação própria; não inventamos um endereço ou ocorrência local.
 
 ## Como funciona
 
-O ESP32 lê as distâncias A/B, processa localmente as transições, acende LED verde para condição normal e vermelho para alerta/medição inválida, e envia snapshots ao canal a cada 20 s. O sentido padrão é A→B; a sequência contrária e a ocupação dos dois pontos por mais de 5 s geram candidatos a alerta.
+Dois HC-SR04 medem as distâncias A/B. O ESP32 processa transições localmente, acende LED verde em leitura válida sem alerta e vermelho diante de alerta ou leitura inválida. A ordem esperada é A→B; a sequência inversa gera candidato a contramão. Ocupação simultânea por mais de 5 s gera candidato a bloqueio. A cada 20 s são enviados snapshots ao ThingSpeak. Para observar valores, mantenha a distância de teste até a próxima publicação.
 
-| Campo | Dado |
+| Campo | Conteúdo |
 |---|---|
-| 1–2 | Distâncias A/B (cm) |
-| 3–4 | Candidato a contramão/bloqueio (0/1) |
-| 5–6 | Totais de candidatos a contramão/bloqueio |
-
-Para notar uma mudança de distância, mantenha o valor de teste até a publicação seguinte. Os contadores preservam ocorrências entre snapshots.
+| 1 e 2 | Distâncias A/B (cm) |
+| 3 e 4 | Estado candidato a contramão/bloqueio (0/1) |
+| 5 e 6 | Contadores cumulativos desses eventos |
 
 ## Componentes e pinagem
 
-ESP32 DevKit V1, dois HC-SR04, LEDs verde/vermelho e resistores de 220 Ω. TRIG/ECHO A: GPIO 18/19; B: 25/26; LEDs: 21/22.
+ESP32 DevKit V1, dois HC-SR04, LEDs verde/vermelho e resistores de 220 Ω. TRIG/ECHO A: GPIO 18/19; B: 25/26; LEDs: GPIO 21/22. Em montagem física, adapte o ECHO de 5 V ao GPIO de 3,3 V do ESP32.
 
 ## Equipe e pendências
 
-- Guilherme Correia — inserir nome completo oficial.
-- João Vitor Barros — inserir nome completo oficial.
-
-O briefing pede nomes completos e uma necessidade local documentada. Completar esses dados e adicionar capturas reais de circuito, monitor serial e gráficos antes da entrega. O relatório e os arquivos-fonte completos estão no pacote local disponibilizado nesta conversa.
+Guilherme Correia e João Vitor Barros — confirmar nomes completos oficiais. Para concluir a entrega, incluir esses nomes, a observação local da equipe e capturas reais dos cenários no Wokwi e dos gráficos ThingSpeak. A transmissão em repouso foi observada; os cenários com alterações de distância e alertas precisam ser registrados.
 
 ## Limitações
 
-Simulação didática: sensores, tráfego e distâncias são virtuais; alertas exigem avaliação humana. Os contadores ficam na RAM e zeram ao reiniciar. Em montagem física, o ECHO de 5 V requer adequação ao GPIO de 3,3 V do ESP32. A Write API Key não deve ser armazenada neste repositório público.
+Sensores e tráfego são simulados. Dois sensores não identificam pessoas/veículos nem comprovam infração; os sinais são candidatos para avaliação humana. Contadores em RAM zeram ao reiniciar. A chave de escrita não está no código público e deve ser configurada apenas numa cópia privada.
