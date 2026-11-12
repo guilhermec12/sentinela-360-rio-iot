@@ -49,6 +49,8 @@ ESP32 DevKit V1; dois HC-SR04; LEDs verde e vermelho com resistores de 220 Ω. S
 
 ## Verificação e limitações
 
-Em um teste anterior, ambos os sensores em 20 cm geraram candidato a bloqueio após cinco segundos; o campo 6 chegou a 1. Ao voltar a 150 cm, o alerta apagou e o contador permaneceu. Esse ensaio usava o intervalo anterior de 20 s. O firmware foi atualizado para 60 s e para reter eventos até um envio aceito; a versão atualizada ainda precisa de execução acompanhada para confirmar telemetria de ponta a ponta. Os sensores e o tráfego são simulados: o sistema não identifica veículos nem comprova infrações.
+Em 12/11/2026, o Wokwi iniciou, conectou ao Wi-Fi e publicou dados aceitos no ThingSpeak. O repouso A=153 cm/B=257 cm coincidiu com os campos 1/2 da entrada 65. Com ambos os sensores a 30 cm por mais de cinco segundos, o alerta de bloqueio foi acionado e a entrada 67 registrou os campos como 30, 30, 0, 1, 0, 1. Na sequência inversa B → A, o alerta de contramão foi acionado; a entrada 69 registrou 152, 253, 1, 1, 1, 2. O bloqueio também foi contado nessa última entrada porque os dois pontos ficaram ocupados por mais de cinco segundos. Ao afastar os objetos, os estados ativos voltaram a 0 e os totais permaneceram. A compilação automatizada do sketch local passou no GitHub Actions.
 
-A equipe precisa confirmar nomes completos oficiais e registrar o cruzamento/bairro e uma observação local própria. Não se inventou local ou ocorrência real.
+Os atalhos individuais usam 30 resultados e atualização visual de 60 s. Os gráficos incorporados ao painel ainda não foram configurados: exibem 60 resultados, e os campos 5/6 usam intervalo visual de 15 s. Falta salvar os parâmetros desejados no painel. Também faltam testar A → B sem alerta, anexar capturas reais, confirmar os nomes oficiais da equipe e registrar uma observação territorial própria.
+
+Sensores e tráfego são simulados: o sistema não identifica veículos nem comprova infrações.
