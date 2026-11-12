@@ -38,7 +38,7 @@ O firmware usa HTTPS e valida TLS. A chave de escrita foi omitida do código pú
 
 ## Verificação observada
 
-A simulação conectou ao Wi-Fi Wokwi e o monitor serial confirmou entradas ThingSpeak aceitas. Os campos de distância mostraram aproximadamente 150 cm com os controles parados. Isso confirma conectividade e publicação de valores em repouso. Os cenários com distâncias alteradas e alertas ainda precisam ser demonstrados e registrados em capturas reais do circuito, serial e gráficos.
+A simulação conectou ao Wi-Fi Wokwi e o monitor serial confirmou as entradas ThingSpeak. Com os dois sensores em 20 cm, o serial indicou candidato a bloqueio após cinco segundos e contador 1; o canal recebeu a mudança de distância e o total no campo 6. Ao restaurar 150 cm, o alerta foi limpo e o total permaneceu 1. Ainda falta demonstrar a sequência inversa para testar contramão e salvar capturas reais dos cenários.
 
 ## Beneficiários e ODS
 
