@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "author": "Sentinela 360 Rio",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-hc-sr04", "id": "a", "top": -95, "left": 135, "attrs": { "distance": "150" } },
+    { "type": "wokwi-hc-sr04", "id": "b", "top": -95, "left": 355, "attrs": { "distance": "150" } },
+    { "type": "wokwi-led", "id": "green", "top": 115, "left": 190, "attrs": { "color": "green" } },
+    { "type": "wokwi-resistor", "id": "r0", "top": 170, "left": 165, "attrs": { "value": "220" } },
+    { "type": "wokwi-led", "id": "red", "top": 115, "left": 275, "attrs": { "color": "red" } },
+    { "type": "wokwi-resistor", "id": "r1", "top": 170, "left": 250, "attrs": { "value": "220" } }
+  ],
+  "connections": [
+    ["a:VCC", "esp:VIN", "red", []], ["a:GND", "esp:GND.1", "black", []],
+    ["a:TRIG", "esp:D18", "blue", []], ["a:ECHO", "esp:D19", "orange", []],
+    ["b:VCC", "esp:VIN", "red", []], ["b:GND", "esp:GND.1", "black", []],
+    ["b:TRIG", "esp:D25", "blue", []], ["b:ECHO", "esp:D26", "orange", []],
+    ["esp:D21", "r0:1", "green", []], ["r0:2", "green:A", "green", []],
+    ["green:C", "esp:GND.2", "black", []], ["esp:D22", "r1:1", "red", []],
+    ["r1:2", "red:A", "red", []], ["red:C", "esp:GND.2", "black", []],
+    ["esp:TX0", "$serialMonitor:RX", "", []]
+  ]
+}
