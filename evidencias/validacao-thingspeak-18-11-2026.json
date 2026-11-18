@@ -1,0 +1,13 @@
+{
+  "project": "Sentinela 360 Rio - Edge",
+  "channel_id": 3574113,
+  "verified_at_utc": "2026-11-18T18:26:55Z",
+  "wokwi": "https://wokwi.com/projects/480355518486978561",
+  "thingspeak_public_feed": "https://api.thingspeak.com/channels/3574113/feeds.json?results=5",
+  "observations": [
+    {"entry_id":110,"created_at":"2026-11-18T18:25:55Z","sensors_cm":[20,152],"contramao":0,"bloqueio":0,"total_contramao":0,"total_bloqueio":0},
+    {"entry_id":111,"created_at":"2026-11-18T18:26:55Z","sensors_cm":[20,20],"contramao":0,"bloqueio":1,"total_contramao":0,"total_bloqueio":1}
+  ],
+  "post_cleanup": {"public_sketch_keyless":true,"compiled":true,"mode":"local-only","serial_sensors_cm":[152,152],"telemetry_enabled":false},
+  "notes": ["Entries 110 and 111 were accepted before the Write API key was removed from the shared Wokwi sketch.","The old key remains valid until revoked in the MathWorks account.","The current public Wokwi simulation runs locally and sends no new ThingSpeak entries."]
+}
