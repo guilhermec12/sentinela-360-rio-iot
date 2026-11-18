@@ -1,71 +1,41 @@
-# Sentinela 360 Rio — CitizenTech IoT
+# CitizenTech IoT — Sentinela 360 Rio
 
-Protótipo acadêmico da FIAP Global Solution 2026.2 para **Edge Computing & Computer Systems**. O circuito simula dois pontos de uma travessia: o ESP32 lê as distâncias, sinaliza condições localmente e publica telemetria no ThingSpeak.
+Disciplina: Edge Computing & Computer Systems · FIAP Global Solution 2026.2 · Engenharia de Software, 1º ano, RJ
 
 ## Equipe
 
 - Guilherme de Paula Correia
 - João Vitor Barbosa Silva
 
-## Links da entrega
+## Problema e público beneficiado
 
-- [Projeto executável no Wokwi](https://wokwi.com/projects/480355518486978561)
-- [Canal público ThingSpeak](https://thingspeak.mathworks.com/channels/3574113)
-- [Relatório técnico](TRABALHO.md)
-- [Evidências e registros de validação](evidencias/README.md)
+Veículos que bloqueiam cruzamentos ou trafegam no sentido contrário podem elevar riscos para pedestres, ciclistas e passageiros do transporte público. O Relatório de Segurança Viária 2023 da Prefeitura do Rio informa que atropelamentos de pedestres e ciclistas representaram 46,9% dos sinistros fatais e aponta concentração de atropelamentos no Centro, incluindo o entorno da Avenida Presidente Vargas. O relatório fundamenta o recorte; a equipe não realizou observação de campo. Os locais e as imagens do protótipo são fictícios e não representam registros reais do Rio. Fonte: https://saude.prefeitura.rio/wp-content/uploads/sites/47/2025/01/Livro_RelatorioDeSegurancaViaria2023_Miolo_20240529-BaixaResolucao.pdf
 
-## Problema, objetivo e beneficiários
+## Solução
 
-A proposta demonstra como sensores conectados podem ajudar a observar padrões de circulação em travessias. Considera pedestres, ciclistas e usuários do transporte público. Relaciona-se aos ODS 11 (Cidades e Comunidades Sustentáveis) e 3 (Saúde e Bem-Estar).
+O ESP32 lê dois sensores ultrassônicos HC-SR04, processa os sinais localmente e acende LEDs para indicar candidatos simulados a contramão ou bloqueio. A ordem esperada é A → B; B → A gera candidato a contramão. A ocupação simultânea por mais de cinco segundos gera candidato a bloqueio. São alertas para análise, não infrações comprovadas.
 
-É uma demonstração didática com sensores simulados: não identifica veículos ou pessoas, não detecta infrações reais e não substitui avaliação humana.
+Componentes: ESP32 DevKit V1, 2 HC-SR04, LED verde e LED vermelho com resistores de 220 Ω. Pinos: A TRIG/ECHO 18/19; B TRIG/ECHO 25/26; LEDs verde/vermelho 21/22. Em montagem física, o ECHO de 5 V deve ser reduzido para proteger GPIOs de 3,3 V.
 
-## Como funciona
+## Links e arquivos
 
-Dois sensores ultrassônicos HC-SR04 representam os pontos A e B. O ESP32 processa as leituras e controla os LEDs verde e vermelho. A sequência esperada é A → B; a sequência B → A gera um alerta simulado de contramão. A ocupação simultânea dos dois pontos por mais de cinco segundos gera um alerta simulado de bloqueio.
+- Simulação Wokwi: https://wokwi.com/projects/480355518486978561
+- Canal público ThingSpeak: https://thingspeak.mathworks.com/channels/3574113
+- Firmware e circuito: pasta wokwi
+- Evidências do ThingSpeak: pasta evidencias
+- Repositório: https://github.com/guilhermec12/sentinela-360-rio-iot
 
-Cada ponto considera ocupado a 40 cm ou menos e livre acima de 50 cm (histerese). A ordem de passagem é avaliada em até 2,5 s. Após 400 ms com os pontos livres, a detecção é rearmada. Leituras fora de 2–400 cm são inválidas.
+A chave foi removida do sketch público. O Wokwi atual inicia em modo local e não envia novas leituras ao ThingSpeak. Uma chave nova só deve ser configurada numa cópia privada. A chave antiga continua válida até ser revogada na conta MathWorks.
 
-O firmware publica snapshots no ThingSpeak a cada 60 segundos, após conexão Wi-Fi e sincronização do horário. A simulação precisa estar rodando no Wokwi para produzir novos dados.
+## Validação e evidências
 
-## Componentes e conexões
+Em 18/11/2026, antes da limpeza da chave, o Wokwi conectou ao Wi-Fi virtual, reconheceu um candidato a bloqueio com os dois sensores a 20 cm e o ThingSpeak confirmou a entrada 111 com evento e total de bloqueios iguais a 1. Depois da limpeza, o sketch compilou e iniciou em modo local, lendo A=152 cm e B=152 cm. O histórico de 12/11 registra o cenário B → A. As leituras são simuladas; os contadores reiniciam com o ESP32 e não há câmera, IA treinada, identificação de veículos ou aplicação de multas.
 
-| Componente | Pinos |
-|---|---|
-| ESP32 DevKit V1 | Microcontrolador |
-| HC-SR04 A | TRIG 18, ECHO 19 |
-| HC-SR04 B | TRIG 25, ECHO 26 |
-| LED verde | GPIO 21, resistor de 220 Ω |
-| LED vermelho | GPIO 22, resistor de 220 Ω |
+- Detalhes do teste: evidencias/VALIDACAO-18-11-2026.md
+- Dados do teste: evidencias/validacao-thingspeak-18-11-2026.json
+- Gráficos históricos: evidencias/thingspeak-painel.png
 
-O diagrama está em wokwi/diagram.json e o sketch sanitizado em wokwi/sketch.ino. A chave de escrita não está no repositório.
+## ODS relacionados
 
-## Campos do ThingSpeak
-
-| Campo | Conteúdo |
-|---|---|
-| 1 | Distância A, em cm |
-| 2 | Distância B, em cm |
-| 3 | Evento/alerta de contramão, 0 ou 1 |
-| 4 | Evento/alerta de bloqueio, 0 ou 1 |
-| 5 | Total acumulado de eventos de contramão |
-| 6 | Total acumulado de eventos de bloqueio |
-
-Os campos de evento ficam ativos enquanto o alerta estiver presente ou até o evento ser confirmado em um envio. Os totais são cumulativos durante a execução e reiniciam quando o ESP32 reinicia.
-
-## Teste de integração
-
-Em 12/11/2026, ajustei os dois sensores para 20 cm no Wokwi. O serial confirmou A=20 cm e B=20 cm; após cinco segundos, o ESP32 indicou bloqueio. O ThingSpeak aceitou as entradas 93 e 94 com os campos 1–6: **20, 20, 0, 1, 0, 1**.
-
-Depois de restaurar os sensores ao repouso, a entrada 95 registrou **152, 152, 0, 0, 0, 1**. Os 152 cm são a leitura observada no simulador com o ajuste nominal de 150 cm. Os registros e a captura dos gráficos estão na pasta evidencias/.
-
-## Estrutura
-
-- wokwi/sketch.ino: código do ESP32 sem a chave de escrita.
-- wokwi/diagram.json: componentes e conexões.
-- TRABALHO.md: descrição técnica.
-- evidencias/: captura dos gráficos e registros da validação.
-
-## Execução
-
-Abra o projeto Wokwi, inicie a simulação e altere a distância de cada HC-SR04 pelo controle do componente. Acompanhe leituras e alertas no Monitor Serial e os envios no canal ThingSpeak. O projeto Wokwi compartilhado está configurado para a demonstração.
+- ODS 11 — Cidades e Comunidades Sustentáveis.
+- ODS 3 — Saúde e Bem-Estar.
